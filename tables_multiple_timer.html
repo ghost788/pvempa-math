@@ -1,0 +1,210 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Multiplication Tables</title>
+<!--script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script-->
+<!--script src="jquery-1.5.2.min.js"></script-->
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+
+if (!Array.prototype.indexOf) 
+{
+	Array.prototype.indexOf = function(obj, start) 
+	{
+    	for (var i = (start || 0), j = this.length; i < j; i++) 
+    	{
+        	if (this[i] === obj) { return i; }
+        }
+    }
+    
+
+}
+	
+var numbers = new Array();
+var wrong = new Array();
+var myVar;
+//var multiplicand = 0;	
+  function Start()
+ {
+	wrong = new Array();
+	var maxmultiplier = document.getElementById("maxmultiplier").value;
+	//var multiplicand = document.getElementById("multiplicand").value;
+	var minmultiplier = parseInt(document.getElementById("minmultiplier").value);
+	var i =0;
+	/*var multiplicands = multiplicand.split(",");
+	for(i=0;i<multiplicands.length;i++)
+	{
+		var j = 0;
+		//alert(maxmultiplier+ " " + multiplicand + " "+ minmultiplier);
+		for(j=minmultiplier;j<=maxmultiplier;j++)
+		{
+			numbers.push(multiplicands[i]+','+j);
+		}
+	}*/
+	//var multiplicands = multiplicand.split(",");
+	for(i=minmultiplier;i<maxmultiplier;i++)
+	{
+		var j = 0;
+		//alert(maxmultiplier+ " " + multiplicand + " "+ minmultiplier);
+		for(j=minmultiplier;j<=maxmultiplier;j++)
+		{
+			numbers.push(i+','+j);
+		}
+	}
+	document.getElementById("beforeStart").style.display = "none";
+	
+	$("#afterStart").css("visibility","visible");
+	//document.getElementById("multiplicandvalue").innerHTML = multiplicand;
+	populateDivs();
+	//alert(numbers.length);
+
+    //implement function here
+	
+}
+
+function end()
+{
+	if(wrong.length!= 0)
+	{
+		var k =0;
+		for(k=0;k<wrong.length;k++)
+		{
+			var divs= wrong[k].split(",");
+			alert(divs[0]+" x "+ divs[1] + " = " + (divs[0]*divs[1]));
+		}
+		alert("You need more practice !!");
+	}
+	else
+	{
+		alert("You are perfect !!");
+	}
+	document.getElementById("beforeStart").style.display = "inline";
+	$("#afterStart").css("visibility","hidden");
+}
+
+	
+function populateDivs()
+{
+	if(numbers.length<1)
+	{
+		
+		end();
+		return -1;
+	}
+	var randomIndex = Math.floor(Math.random()*numbers.length);
+	var equation =numbers[randomIndex];
+	var divs = equation.split(",");
+	document.getElementById("multiplicandvalue").innerHTML = divs[0];
+	document.getElementById("multipliervalue").innerHTML = divs[1];
+	document.getElementById("answer").value = "";
+	$("#answer").focus();
+	myVar = setTimeout(function(){checkAnswer()},3000);
+}
+	
+function checkAnswer()
+{
+	clearTimeout(myVar);;
+	var multiplicand = document.getElementById("multiplicandvalue").innerHTML;
+	var multiplier =  document.getElementById("multipliervalue").innerHTML;
+	var Answer = document.getElementById("answer").value;
+	//alert(Answer +" "+ multiplicand+ " " +  multiplier);
+	//alert(multiplier*multiplicand);
+	if(Answer==(multiplier*multiplicand))
+	{
+			
+		//var index = numbers.indexOf(parseInt(multiplier));
+		var index = numbers.indexOf(multiplicand+","+multiplier);
+		
+		numbers.splice(index, 1);
+		
+		populateDivs();
+		
+	}			
+	else
+	{
+		if($.inArray(multiplicand+","+multiplier,wrong)==-1)
+			wrong.push(multiplicand+","+multiplier);
+		alert(multiplicand+ " x "+ multiplier+ " = " + (multiplier*multiplicand));
+		populateDivs();
+	}
+}
+
+
+//alert(request.getParameter('maxmultiplier'))
+//alert(request.getParameter('maxmultiplier'));
+</script>
+</head>
+<body>
+
+
+<div id="beforeStart">
+
+<!--
+Enter  Multiplicand(s) : 
+<input type="text" value="" id="multiplicand">
+-->
+Enter Minimum Multiplier : 
+<input type="text" value="" id="minmultiplier">
+
+Enter Maximum Multiplier : 
+<input type="text" value="" id="maxmultiplier">
+
+<button type="submit" onclick="Start()" id="myBtn" value="Submit">Start</button>
+</div>
+<div id="afterStart" style="visibility:hidden;" >
+<table>
+<tr><td><div id="multiplicandvalue"></div></td><td>x</td><td><div id="multipliervalue"></div></td><td><input type="text" id="answer" value=""></td><td><button type="submit" id="ansSubmit" onclick="checkAnswer()">Submit</button></td></tr>
+</table>
+</div>
+<script type="text/javascript">
+	
+	var input = document.getElementById("maxmultiplier");
+	input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("myBtn").click();
+  }
+});
+
+
+	var ansInput = document.getElementById("answer");
+	ansInput.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    document.getElementById("ansSubmit").click();
+  }
+});
+
+</script>
+
+
+
+
+<!-- %
+while(numbers.size()>0)
+{
+	int index = new Random().nextInt(numbers.size());
+	Integer randomeValue =(Integer) numbers.get(index);
+%>
+<form action="tables.jsp" method="get">
+
+
+</form>
+<!--%
+	out.println("<p>"+index+" : "+randomeValue+"</p>");
+	numbers.remove(index);	
+}
+		
+		
+
+ %-->
+
+</body>
+</html>
